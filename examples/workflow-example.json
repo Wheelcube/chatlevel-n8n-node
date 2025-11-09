@@ -1,154 +1,304 @@
-{
-  "name": "ChatLevel Examples",
-  "nodes": [
-    {
-      "parameters": {},
-      "name": "Start",
-      "type": "n8n-nodes-base.start",
-      "typeVersion": 1,
-      "position": [250, 300]
-    },
-    {
-      "parameters": {
-        "resource": "message",
-        "operation": "sendText",
-        "phoneNumber": "5511999999999",
-        "message": "Hello from n8n! This is a test message."
-      },
-      "name": "Send Text Message",
-      "type": "n8n-nodes-chatlevel.chatLevel",
-      "typeVersion": 1,
-      "position": [450, 200],
-      "credentials": {
-        "chatLevelApi": {
-          "id": "1",
-          "name": "ChatLevel API"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "message",
-        "operation": "sendMedia",
-        "phoneNumber": "5511999999999",
-        "mediaType": "image",
-        "mediaUrl": "https://example.com/image.jpg",
-        "caption": "Check out this image!"
-      },
-      "name": "Send Image",
-      "type": "n8n-nodes-chatlevel.chatLevel",
-      "typeVersion": 1,
-      "position": [450, 400],
-      "credentials": {
-        "chatLevelApi": {
-          "id": "1",
-          "name": "ChatLevel API"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "message",
-        "operation": "sendTemplate",
-        "phoneNumber": "5511999999999",
-        "templateName": "welcome_message",
-        "templateLanguage": "en",
-        "templateParameters": "[\"John\", \"n8n\"]"
-      },
-      "name": "Send Template",
-      "type": "n8n-nodes-chatlevel.chatLevel",
-      "typeVersion": 1,
-      "position": [450, 600],
-      "credentials": {
-        "chatLevelApi": {
-          "id": "1",
-          "name": "ChatLevel API"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "contact",
-        "operation": "create",
-        "phoneNumber": "5511999999999",
-        "additionalFields": {
-          "name": "John Doe",
-          "email": "john@example.com",
-          "tags": "customer, vip"
-        }
-      },
-      "name": "Create Contact",
-      "type": "n8n-nodes-chatlevel.chatLevel",
-      "typeVersion": 1,
-      "position": [650, 200],
-      "credentials": {
-        "chatLevelApi": {
-          "id": "1",
-          "name": "ChatLevel API"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "message",
-        "operation": "getMany",
-        "returnAll": false,
-        "limit": 10,
-        "additionalFields": {
-          "status": "delivered"
-        }
-      },
-      "name": "Get Recent Messages",
-      "type": "n8n-nodes-chatlevel.chatLevel",
-      "typeVersion": 1,
-      "position": [650, 400],
-      "credentials": {
-        "chatLevelApi": {
-          "id": "1",
-          "name": "ChatLevel API"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "webhook",
-        "operation": "create",
-        "webhookUrl": "https://your-n8n-instance.com/webhook/chatlevel",
-        "events": ["message.received", "message.delivered"]
-      },
-      "name": "Create Webhook",
-      "type": "n8n-nodes-chatlevel.chatLevel",
-      "typeVersion": 1,
-      "position": [650, 600],
-      "credentials": {
-        "chatLevelApi": {
-          "id": "1",
-          "name": "ChatLevel API"
-        }
-      }
-    }
-  ],
-  "connections": {
-    "Start": {
-      "main": [
-        [
-          {
-            "node": "Send Text Message",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Send Image",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Send Template",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Create Contact",
+{{
+
+  "name": "ChatLevel Examples",  "name": "ChatLevel Examples",
+
+  "nodes": [  "nodes": [
+
+    {    {
+
+      "parameters": {},      "parameters": {},
+
+      "name": "Start",      "name": "Start",
+
+      "type": "n8n-nodes-base.start",      "type": "n8n-nodes-base.start",
+
+      "typeVersion": 1,      "typeVersion": 1,
+
+      "position": [250, 300]      "position": [250, 300]
+
+    },    },
+
+    {    {
+
+      "parameters": {      "parameters": {
+
+        "operation": "create",        "resource": "message",
+
+        "phoneNumber": "31612345678",        "operation": "sendText",
+
+        "additionalFields": {        "phoneNumber": "5511999999999",
+
+          "name": "My WhatsApp Device",        "message": "Hello from n8n! This is a test message."
+
+          "webhookUrl": "https://webhook.example.com/whatsapp",      },
+
+          "webhookEvents": [      "name": "Send Text Message",
+
+            "connection.open",      "type": "n8n-nodes-chatlevel.chatLevel",
+
+            "connection.closed",      "typeVersion": 1,
+
+            "message.received",      "position": [450, 200],
+
+            "message.sent"      "credentials": {
+
+          ],        "chatLevelApi": {
+
+          "password": "secure123"          "id": "1",
+
+        }          "name": "ChatLevel API"
+
+      },        }
+
+      "name": "Create Device",      }
+
+      "type": "n8n-nodes-chatlevel.chatLevelDevice",    },
+
+      "typeVersion": 1,    {
+
+      "position": [450, 200],      "parameters": {
+
+      "credentials": {        "resource": "message",
+
+        "chatLevelApi": {        "operation": "sendMedia",
+
+          "id": "1",        "phoneNumber": "5511999999999",
+
+          "name": "ChatLevel API"        "mediaType": "image",
+
+        }        "mediaUrl": "https://example.com/image.jpg",
+
+      }        "caption": "Check out this image!"
+
+    },      },
+
+    {      "name": "Send Image",
+
+      "parameters": {      "type": "n8n-nodes-chatlevel.chatLevel",
+
+        "operation": "sendText",      "typeVersion": 1,
+
+        "deviceId": "={{$node[\"Create Device\"].json[\"id\"]}}",      "position": [450, 400],
+
+        "toNumber": "31687654321",      "credentials": {
+
+        "message": "Hello from n8n!",        "chatLevelApi": {
+
+        "additionalFields": {          "id": "1",
+
+          "type": "template",          "name": "ChatLevel API"
+
+          "templateName": "welcome_message",        }
+
+          "templateLanguage": "en",      }
+
+          "templateVariables": "{\"name\": \"John\", \"platform\": \"n8n\"}"    },
+
+        }    {
+
+      },      "parameters": {
+
+      "name": "Send Text Message",        "resource": "message",
+
+      "type": "n8n-nodes-chatlevel.chatLevelText",        "operation": "sendTemplate",
+
+      "typeVersion": 1,        "phoneNumber": "5511999999999",
+
+      "position": [650, 200],        "templateName": "welcome_message",
+
+      "credentials": {        "templateLanguage": "en",
+
+        "chatLevelApi": {        "templateParameters": "[\"John\", \"n8n\"]"
+
+          "id": "1",      },
+
+          "name": "ChatLevel API"      "name": "Send Template",
+
+        }      "type": "n8n-nodes-chatlevel.chatLevel",
+
+      }      "typeVersion": 1,
+
+    },      "position": [450, 600],
+
+    {      "credentials": {
+
+      "parameters": {        "chatLevelApi": {
+
+        "operation": "sendMedia",          "id": "1",
+
+        "deviceId": "={{$node[\"Create Device\"].json[\"id\"]}}",          "name": "ChatLevel API"
+
+        "toNumber": "31687654321",        }
+
+        "mediaType": "image",      }
+
+        "mediaSource": "url",    },
+
+        "mediaUrl": "https://example.com/image.jpg",    {
+
+        "additionalFields": {      "parameters": {
+
+          "caption": "Check out this image!"        "resource": "contact",
+
+        }        "operation": "create",
+
+      },        "phoneNumber": "5511999999999",
+
+      "name": "Send Media Message",        "additionalFields": {
+
+      "type": "n8n-nodes-chatlevel.chatLevelMedia",          "name": "John Doe",
+
+      "typeVersion": 1,          "email": "john@example.com",
+
+      "position": [650, 400],          "tags": "customer, vip"
+
+      "credentials": {        }
+
+        "chatLevelApi": {      },
+
+          "id": "1",      "name": "Create Contact",
+
+          "name": "ChatLevel API"      "type": "n8n-nodes-chatlevel.chatLevel",
+
+        }      "typeVersion": 1,
+
+      }      "position": [650, 200],
+
+    },      "credentials": {
+
+    {        "chatLevelApi": {
+
+      "parameters": {          "id": "1",
+
+        "operation": "get",          "name": "ChatLevel API"
+
+        "deviceId": "={{$node[\"Create Device\"].json[\"id\"]}}",        }
+
+        "additionalFields": {      }
+
+          "includeSubscriptionStatus": true    },
+
+        }    {
+
+      },      "parameters": {
+
+      "name": "Get Device Status",        "resource": "message",
+
+      "type": "n8n-nodes-chatlevel.chatLevelDevice",        "operation": "getMany",
+
+      "typeVersion": 1,        "returnAll": false,
+
+      "position": [850, 200],        "limit": 10,
+
+      "credentials": {        "additionalFields": {
+
+        "chatLevelApi": {          "status": "delivered"
+
+          "id": "1",        }
+
+          "name": "ChatLevel API"      },
+
+        }      "name": "Get Recent Messages",
+
+      }      "type": "n8n-nodes-chatlevel.chatLevel",
+
+    }      "typeVersion": 1,
+
+  ],      "position": [650, 400],
+
+  "connections": {      "credentials": {
+
+    "Start": {        "chatLevelApi": {
+
+      "main": [          "id": "1",
+
+        [          "name": "ChatLevel API"
+
+          {        }
+
+            "node": "Create Device",      }
+
+            "type": "main",    },
+
+            "index": 0    {
+
+          }      "parameters": {
+
+        ]        "resource": "webhook",
+
+      ]        "operation": "create",
+
+    },        "webhookUrl": "https://your-n8n-instance.com/webhook/chatlevel",
+
+    "Create Device": {        "events": ["message.received", "message.delivered"]
+
+      "main": [      },
+
+        [      "name": "Create Webhook",
+
+          {      "type": "n8n-nodes-chatlevel.chatLevel",
+
+            "node": "Send Text Message",      "typeVersion": 1,
+
+            "type": "main",      "position": [650, 600],
+
+            "index": 0      "credentials": {
+
+          }        "chatLevelApi": {
+
+        ]          "id": "1",
+
+      ]          "name": "ChatLevel API"
+
+    },        }
+
+    "Send Text Message": {      }
+
+      "main": [    }
+
+        [  ],
+
+          {  "connections": {
+
+            "node": "Send Media Message",    "Start": {
+
+            "type": "main",      "main": [
+
+            "index": 0        [
+
+          }          {
+
+        ]            "node": "Send Text Message",
+
+      ]            "type": "main",
+
+    },            "index": 0
+
+    "Send Media Message": {          },
+
+      "main": [          {
+
+        [            "node": "Send Image",
+
+          {            "type": "main",
+
+            "node": "Get Device Status",            "index": 0
+
+            "type": "main",          },
+
+            "index": 0          {
+
+          }            "node": "Send Template",
+
+        ]            "type": "main",
+
+      ]            "index": 0
+
+    }          },
+
+  }          {
+
+}            "node": "Create Contact",
             "type": "main",
             "index": 0
           },

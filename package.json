@@ -34,7 +34,7 @@
     ],
     "nodes": [
       "dist/nodes/ChatLevel/ChatLevel.node.js",
-      "dist/nodes/ChatLevel/ChatLevelTrigger.node.js"
+      "dist/nodes/ChatLevel/ChatLevel.trigger.node.js"
     ]
   },
   "devDependencies": {

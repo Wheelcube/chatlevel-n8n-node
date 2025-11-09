@@ -7,10 +7,10 @@ import {
 	NodeOperationError,
 } from 'n8n-workflow';
 
-export class ChatLevel implements INodeType {
+export class ChatLevelDevice implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'ChatLevel',
-		name: 'chatLevel',
+		displayName: 'ChatLevel Device',
+		name: 'chatLevelDevice',
 		icon: 'file:chatlevel.svg',
 		group: ['transform'],
 		version: 1,
@@ -345,118 +345,12 @@ export class ChatLevel implements INodeType {
 				type: 'string',
 				displayOptions: {
 					show: {
-						resource: ['device'],
 						operation: ['restart'],
 					},
 				},
 				default: '',
 				placeholder: '31612345678',
 				description: 'Phone number for pairing code (optional, alternative to QR)',
-			},
-
-			// Message: Send Text Fields
-			{
-				displayName: 'To Number',
-				name: 'toNumber',
-				type: 'string',
-				required: true,
-				displayOptions: {
-					show: {
-						resource: ['message'],
-						operation: ['sendText', 'sendMedia'],
-					},
-				},
-				default: '',
-				placeholder: '31620292537',
-				description: 'WhatsApp phone number (digits only, 8-15 characters)',
-			},
-			{
-				displayName: 'Message',
-				name: 'message',
-				type: 'string',
-				required: true,
-				displayOptions: {
-					show: {
-						resource: ['message'],
-						operation: ['sendText'],
-					},
-				},
-				default: '',
-				description: 'Text message to send',
-				typeOptions: {
-					rows: 4,
-				},
-			},
-
-			// Message: Send Media Fields
-			{
-				displayName: 'Media Source',
-				name: 'mediaSource',
-				type: 'options',
-				displayOptions: {
-					show: {
-						resource: ['message'],
-						operation: ['sendMedia'],
-					},
-				},
-				options: [
-					{
-						name: 'URL',
-						value: 'url',
-					},
-					{
-						name: 'Base64',
-						value: 'base64',
-					},
-				],
-				default: 'url',
-				description: 'Source of the media',
-			},
-			{
-				displayName: 'Media URL',
-				name: 'mediaUrl',
-				type: 'string',
-				required: true,
-				displayOptions: {
-					show: {
-						resource: ['message'],
-						operation: ['sendMedia'],
-						mediaSource: ['url'],
-					},
-				},
-				default: '',
-				description: 'URL of the media file',
-			},
-			{
-				displayName: 'Media Base64',
-				name: 'mediaBase64',
-				type: 'string',
-				required: true,
-				displayOptions: {
-					show: {
-						resource: ['message'],
-						operation: ['sendMedia'],
-						mediaSource: ['base64'],
-					},
-				},
-				default: '',
-				description: 'Base64 encoded media content',
-				typeOptions: {
-					rows: 4,
-				},
-			},
-			{
-				displayName: 'Caption',
-				name: 'mediaCaption',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['message'],
-						operation: ['sendMedia'],
-					},
-				},
-				default: '',
-				description: 'Optional caption for the media',
 			},
 		],
 	};
