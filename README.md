@@ -1,0 +1,177 @@
+# chatlevel-n8n
+
+This is an n8n community node for the ChatLevel WhatsApp API.
+
+ChatLevel is a WhatsApp integration platform that provides a simple API for managing WhatsApp accounts programmatically.
+
+[n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
+
+[Installation](#installation)  
+[Operations](#operations)  
+[Credentials](#credentials)  
+[Usage](#usage)  
+[Resources](#resources)  
+
+## Installation
+
+Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
+
+### Community Nodes (Recommended)
+
+1. Go to **Settings > Community Nodes** in your n8n instance
+2. Select **Install**
+3. Enter `chatlevel-n8n` in **Enter npm package name**
+4. Agree to the risks and select **Install**
+
+### Manual Installation
+
+```bash
+npm install chatlevel-n8n
+```
+
+For Docker installations:
+
+```bash
+docker exec -it <container_id> npm install -g chatlevel-n8n
+```
+
+## Operations
+
+This package includes two nodes:
+
+### ChatLevel Node (Actions)
+
+**Device Operations:**
+- **Create** - Create a new WhatsApp device
+- **Get** - Get a specific device
+- **Get Many** - List all devices
+- **Update** - Update device settings (name, webhook, subscription status)
+- **Delete** - Delete a device
+- **Disconnect** - Disconnect a device from WhatsApp
+- **Restart** - Restart a device session
+
+**Message Operations:**
+- **Send Text** - Send a text message
+- **Send Media** - Send media (image, video, audio, document) via URL or Base64
+
+### ChatLevel Trigger Node (Webhook)
+
+Receives real-time events from ChatLevel:
+- **device.connected** - Device connected to WhatsApp
+- **device.disconnected** - Device disconnected from WhatsApp
+- **qr** - QR code generated for pairing
+- **qr.timeout** - QR code expired
+- **message.received** - Incoming message received
+- **message.sent** - Outgoing message sent
+- **message.updated** - Message status updated
+- **message.deleted** - Message deleted
+
+## Credentials
+
+To use this node, you need ChatLevel API credentials:
+
+1. Sign up at [ChatLevel](https://chatlevel.io)
+2. Get your API key from the developers section
+3. In n8n, create new credentials of type **ChatLevel API**
+4. Enter your API key
+5. (Optional) Modify the base URL if needed
+
+## Usage
+
+### Setting up a Device
+
+1. Use **ChatLevel > Device > Create** to create a new device
+2. The response will include a QR code (base64 data URL) if status is 'qr'
+3. Scan the QR code with WhatsApp to link the device
+4. Alternatively, provide a phone number to receive a pairing code
+
+### Sending Messages
+
+1. Add **ChatLevel** node to workflow
+2. Select **Message** resource
+3. Choose **Send Text** or **Send Media**
+4. Enter the Device ID (from your device list)
+5. Enter recipient phone number (digits only, with country code)
+6. Enter your message or media URL/Base64
+
+### Receiving Messages (Webhook Trigger)
+
+1. Add **ChatLevel Trigger** node to workflow
+2. Select which events you want to receive
+3. Copy the webhook URL shown in n8n
+4. In ChatLevel dashboard, go to your device settings
+5. Add the webhook URL and select the same events
+6. Your workflow will now trigger automatically when events occur
+
+## Example Workflows
+
+### Auto-Reply to Incoming Messages
+```
+ChatLevel Trigger (message.received) → ChatLevel (Send Text)
+```
+
+### Send Message from Form
+```
+Webhook → ChatLevel (Send Text)
+```
+
+### Forward Messages to Email
+```
+ChatLevel Trigger (message.received) → Gmail (Send Email)
+```
+
+### Broadcast to Multiple Numbers
+```
+Schedule → Read Spreadsheet → Loop → ChatLevel (Send Text)
+```
+
+## Webhook Events Payload Examples
+
+### message.received
+```json
+{
+  "event": "message.received",
+  "deviceId": 123,
+  "message": {
+    "id": "msg_id",
+    "from": "31612345678",
+    "body": "Hello!",
+    "timestamp": 1234567890
+  }
+}
+```
+
+### device.connected
+```json
+{
+  "event": "device.connected",
+  "deviceId": 123,
+  "timestamp": 1234567890
+}
+```
+
+### qr
+```json
+{
+  "event": "qr",
+  "deviceId": 123,
+  "qr": "data:image/png;base64,...",
+  "timestamp": 1234567890
+}
+```
+
+## Resources
+
+* [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
+* [ChatLevel API documentation](https://docs.chatlevel.io)
+* [ChatLevel website](https://chatlevel.io)
+
+## Support
+
+For issues with this node, please open an issue on the [GitHub repository](https://github.com/yourusername/chatlevel-n8n/issues).
+
+For ChatLevel API support, visit [ChatLevel Documentation](https://docs.chatlevel.io) or contact their support team.
+
+## License
+
+[MIT](LICENSE.md)
