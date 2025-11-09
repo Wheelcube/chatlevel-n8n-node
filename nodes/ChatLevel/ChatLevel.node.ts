@@ -618,21 +618,6 @@ export class ChatLevel implements INodeType {
 
 		return [returnData];
 	}
-			} catch (error) {
-				if (this.continueOnFail()) {
-					const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-					returnData.push({
-						json: { error: errorMessage },
-						pairedItem: { item: i },
-					});
-					continue;
-				}
-				throw error;
-			}
-		}
-
-		return [returnData];
-	}
 }
 
 async function chatLevelApiRequest(
