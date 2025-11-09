@@ -35,14 +35,34 @@ export class ChatLevelTrigger implements INodeType {
 				type: 'multiOptions',
 				options: [
 					{
-						name: 'Device Connected',
-						value: 'device.connected',
-						description: 'Triggers when a device connects to WhatsApp',
+						name: 'Call',
+						value: 'call',
+						description: 'Triggers when a call is received',
 					},
 					{
-						name: 'Device Disconnected',
-						value: 'device.disconnected',
-						description: 'Triggers when a device disconnects from WhatsApp',
+						name: 'Connection Auth',
+						value: 'connection.auth',
+						description: 'Triggers when device authentication occurs',
+					},
+					{
+						name: 'Connection Closed',
+						value: 'connection.closed',
+						description: 'Triggers when connection is closed',
+					},
+					{
+						name: 'Connection Logout',
+						value: 'connection.logout',
+						description: 'Triggers when device logs out',
+					},
+					{
+						name: 'Connection Open',
+						value: 'connection.open',
+						description: 'Triggers when connection opens',
+					},
+					{
+						name: 'Connection Timeout',
+						value: 'connection.timeout',
+						description: 'Triggers when connection times out',
 					},
 					{
 						name: 'Message Deleted',
@@ -63,16 +83,6 @@ export class ChatLevelTrigger implements INodeType {
 						name: 'Message Updated',
 						value: 'message.updated',
 						description: 'Triggers when a message is updated',
-					},
-					{
-						name: 'QR Code',
-						value: 'qr',
-						description: 'Triggers when a QR code is generated',
-					},
-					{
-						name: 'QR Timeout',
-						value: 'qr.timeout',
-						description: 'Triggers when QR code expires',
 					},
 				],
 				default: [],

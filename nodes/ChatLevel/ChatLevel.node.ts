@@ -5,6 +5,8 @@ import {
 	INodeTypeDescription,
 	IDataObject,
 	NodeOperationError,
+	ILoadOptionsFunctions,
+	INodePropertyOptions,
 } from 'n8n-workflow';
 
 export class ChatLevel implements INodeType {
@@ -125,7 +127,7 @@ export class ChatLevel implements INodeType {
 					{
 						name: 'Send Media',
 						value: 'sendMedia',
-						description: 'Send a media message',
+						description: 'Send a media message (image only: PNG, JPEG, GIF, WebP)',
 						action: 'Send a media message',
 					},
 				],
@@ -134,31 +136,48 @@ export class ChatLevel implements INodeType {
 
 			// Device ID field (used by most operations)
 			{
-				displayName: 'Device ID',
+				displayName: 'Select Device',
+				name: 'selectDevice',
+				type: 'options',
+				options: [
+					{
+						name: 'From List',
+						value: 'fromList',
+					},
+					{
+						name: 'By ID',
+						value: 'byId',
+					},
+				],
+				default: 'fromList',
+				description: 'Choose how to select the device',
+			},
+			{
+				displayName: 'Device',
 				name: 'deviceId',
-				type: 'number',
-				required: true,
+				type: 'options',
+				typeOptions: {
+					loadOptionsMethod: 'getDevices',
+				},
 				displayOptions: {
 					show: {
-						resource: ['device'],
-						operation: ['get', 'update', 'delete', 'disconnect', 'restart'],
+						selectDevice: ['fromList'],
 					},
 				},
 				default: '',
-				description: 'The ID of the device',
+				description: 'Select a device from the list',
 			},
 			{
 				displayName: 'Device ID',
 				name: 'deviceId',
-				type: 'number',
-				required: true,
+				type: 'string',
 				displayOptions: {
 					show: {
-						resource: ['message'],
+						selectDevice: ['byId'],
 					},
 				},
 				default: '',
-				description: 'The ID of the device to send from',
+				description: 'Enter the device ID manually',
 			},
 
 			// Device Create Fields
@@ -180,7 +199,7 @@ export class ChatLevel implements INodeType {
 						name: 'name',
 						type: 'string',
 						default: '',
-						description: 'User-friendly device name (1-20 characters)',
+						description: 'User-friendly device name',
 					},
 					{
 						displayName: 'Webhook URL',
@@ -195,20 +214,32 @@ export class ChatLevel implements INodeType {
 						type: 'multiOptions',
 						options: [
 							{
-								name: 'Device Connected',
-								value: 'device.connected',
+								name: 'Call',
+								value: 'call',
 							},
 							{
-								name: 'Device Disconnected',
-								value: 'device.disconnected',
+								name: 'Connection Auth',
+								value: 'connection.auth',
 							},
 							{
-								name: 'QR Code',
-								value: 'qr',
+								name: 'Connection Closed',
+								value: 'connection.closed',
 							},
 							{
-								name: 'QR Timeout',
-								value: 'qr.timeout',
+								name: 'Connection Logout',
+								value: 'connection.logout',
+							},
+							{
+								name: 'Connection Open',
+								value: 'connection.open',
+							},
+							{
+								name: 'Connection Timeout',
+								value: 'connection.timeout',
+							},
+							{
+								name: 'Message Deleted',
+								value: 'message.deleted',
 							},
 							{
 								name: 'Message Received',
@@ -221,10 +252,6 @@ export class ChatLevel implements INodeType {
 							{
 								name: 'Message Updated',
 								value: 'message.updated',
-							},
-							{
-								name: 'Message Deleted',
-								value: 'message.deleted',
 							},
 						],
 						default: [],
@@ -260,14 +287,14 @@ export class ChatLevel implements INodeType {
 						name: 'name',
 						type: 'string',
 						default: '',
-						description: 'New name for the device (1-20 characters)',
+						description: 'New name for the device',
 					},
 					{
 						displayName: 'Webhook URL',
 						name: 'webhookUrl',
 						type: 'string',
 						default: '',
-						description: 'Webhook URL for receiving events (leave empty to disable)',
+						description: 'Webhook URL for receiving events (set to empty string to disable)',
 					},
 					{
 						displayName: 'Webhook Events',
@@ -275,20 +302,32 @@ export class ChatLevel implements INodeType {
 						type: 'multiOptions',
 						options: [
 							{
-								name: 'Device Connected',
-								value: 'device.connected',
+								name: 'Call',
+								value: 'call',
 							},
 							{
-								name: 'Device Disconnected',
-								value: 'device.disconnected',
+								name: 'Connection Auth',
+								value: 'connection.auth',
 							},
 							{
-								name: 'QR Code',
-								value: 'qr',
+								name: 'Connection Closed',
+								value: 'connection.closed',
 							},
 							{
-								name: 'QR Timeout',
-								value: 'qr.timeout',
+								name: 'Connection Logout',
+								value: 'connection.logout',
+							},
+							{
+								name: 'Connection Open',
+								value: 'connection.open',
+							},
+							{
+								name: 'Connection Timeout',
+								value: 'connection.timeout',
+							},
+							{
+								name: 'Message Deleted',
+								value: 'message.deleted',
 							},
 							{
 								name: 'Message Received',
@@ -301,10 +340,6 @@ export class ChatLevel implements INodeType {
 							{
 								name: 'Message Updated',
 								value: 'message.updated',
-							},
-							{
-								name: 'Message Deleted',
-								value: 'message.deleted',
 							},
 						],
 						default: [],
@@ -360,7 +395,7 @@ export class ChatLevel implements INodeType {
 				},
 				default: '',
 				placeholder: '31620292537',
-				description: 'WhatsApp phone number (digits only, 8-15 characters)',
+				description: 'WhatsApp phone number (digits only)',
 			},
 			{
 				displayName: 'Message',
@@ -417,7 +452,7 @@ export class ChatLevel implements INodeType {
 					},
 				},
 				default: '',
-				description: 'URL of the media file',
+				description: 'URL of the media file (PNG, JPEG, GIF, WebP only, max 10MB)',
 			},
 			{
 				displayName: 'Media Base64',
@@ -432,7 +467,7 @@ export class ChatLevel implements INodeType {
 					},
 				},
 				default: '',
-				description: 'Base64 encoded media content',
+				description: 'Base64 encoded media content (PNG, JPEG, GIF, WebP only, max 10MB)',
 				typeOptions: {
 					rows: 4,
 				},
@@ -451,6 +486,31 @@ export class ChatLevel implements INodeType {
 				description: 'Optional caption for the media',
 			},
 		],
+	};
+
+	methods = {
+		loadOptions: {
+			async getDevices(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const credentials = await this.getCredentials('chatLevelApi');
+				const response = await this.helpers.request({
+					method: 'GET',
+					uri: `${credentials.baseUrl || 'https://api.chatlevel.io/v1'}/devices`,
+					headers: {
+						Authorization: `Bearer ${credentials.apiKey}`,
+					},
+					json: true,
+				});
+
+				if (!response.devices) {
+					throw new Error('No devices found');
+				}
+
+				return response.devices.map((device: { id: number; name: string }) => ({
+					name: device.name,
+					value: device.id,
+				}));
+			},
+		},
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
