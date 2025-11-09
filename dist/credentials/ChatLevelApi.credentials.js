@@ -16,14 +16,7 @@ class ChatLevelApi {
                 },
                 default: '',
                 required: true,
-                description: 'Your ChatLevel API key',
-            },
-            {
-                displayName: 'Base URL',
-                name: 'baseUrl',
-                type: 'string',
-                default: 'https://api.chatlevel.io/v1',
-                description: 'Base URL for the ChatLevel API',
+                description: 'API key authentication. You can create an API key in Chatlevel under Integrations -> Add integration -> n8n',
             },
         ];
         this.authenticate = {
@@ -36,8 +29,8 @@ class ChatLevelApi {
         };
         this.test = {
             request: {
-                baseURL: '={{$credentials.baseUrl || "https://api.chatlevel.io/v1"}}',
-                url: '/me',
+                baseURL: 'https://api.chatlevel.io/v1',
+                url: '/devices',
                 method: 'GET',
             },
         };

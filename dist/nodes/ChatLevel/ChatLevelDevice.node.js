@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChatLevel = void 0;
+exports.ChatLevelDevice = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
-class ChatLevel {
+class ChatLevelDevice {
     constructor() {
         this.description = {
-            displayName: 'ChatLevel',
-            name: 'chatLevel',
+            displayName: 'ChatLevel Device',
+            name: 'chatLevelDevice',
             icon: 'file:chatlevel.svg',
             group: ['transform'],
             version: 1,
@@ -335,116 +335,12 @@ class ChatLevel {
                     type: 'string',
                     displayOptions: {
                         show: {
-                            resource: ['device'],
                             operation: ['restart'],
                         },
                     },
                     default: '',
                     placeholder: '31612345678',
                     description: 'Phone number for pairing code (optional, alternative to QR)',
-                },
-                // Message: Send Text Fields
-                {
-                    displayName: 'To Number',
-                    name: 'toNumber',
-                    type: 'string',
-                    required: true,
-                    displayOptions: {
-                        show: {
-                            resource: ['message'],
-                            operation: ['sendText', 'sendMedia'],
-                        },
-                    },
-                    default: '',
-                    placeholder: '31620292537',
-                    description: 'WhatsApp phone number (digits only, 8-15 characters)',
-                },
-                {
-                    displayName: 'Message',
-                    name: 'message',
-                    type: 'string',
-                    required: true,
-                    displayOptions: {
-                        show: {
-                            resource: ['message'],
-                            operation: ['sendText'],
-                        },
-                    },
-                    default: '',
-                    description: 'Text message to send',
-                    typeOptions: {
-                        rows: 4,
-                    },
-                },
-                // Message: Send Media Fields
-                {
-                    displayName: 'Media Source',
-                    name: 'mediaSource',
-                    type: 'options',
-                    displayOptions: {
-                        show: {
-                            resource: ['message'],
-                            operation: ['sendMedia'],
-                        },
-                    },
-                    options: [
-                        {
-                            name: 'URL',
-                            value: 'url',
-                        },
-                        {
-                            name: 'Base64',
-                            value: 'base64',
-                        },
-                    ],
-                    default: 'url',
-                    description: 'Source of the media',
-                },
-                {
-                    displayName: 'Media URL',
-                    name: 'mediaUrl',
-                    type: 'string',
-                    required: true,
-                    displayOptions: {
-                        show: {
-                            resource: ['message'],
-                            operation: ['sendMedia'],
-                            mediaSource: ['url'],
-                        },
-                    },
-                    default: '',
-                    description: 'URL of the media file',
-                },
-                {
-                    displayName: 'Media Base64',
-                    name: 'mediaBase64',
-                    type: 'string',
-                    required: true,
-                    displayOptions: {
-                        show: {
-                            resource: ['message'],
-                            operation: ['sendMedia'],
-                            mediaSource: ['base64'],
-                        },
-                    },
-                    default: '',
-                    description: 'Base64 encoded media content',
-                    typeOptions: {
-                        rows: 4,
-                    },
-                },
-                {
-                    displayName: 'Caption',
-                    name: 'mediaCaption',
-                    type: 'string',
-                    displayOptions: {
-                        show: {
-                            resource: ['message'],
-                            operation: ['sendMedia'],
-                        },
-                    },
-                    default: '',
-                    description: 'Optional caption for the media',
                 },
             ],
         };
@@ -545,7 +441,7 @@ class ChatLevel {
         return [returnData];
     }
 }
-exports.ChatLevel = ChatLevel;
+exports.ChatLevelDevice = ChatLevelDevice;
 async function chatLevelApiRequest(method, endpoint, body = {}, qs = {}) {
     const credentials = await this.getCredentials('chatLevelApi');
     const options = {
