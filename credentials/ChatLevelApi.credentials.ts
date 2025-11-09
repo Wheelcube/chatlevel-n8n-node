@@ -19,7 +19,14 @@ export class ChatLevelApi implements ICredentialType {
 			},
 			default: '',
 			required: true,
-			description: 'API key authentication. You can create an API key in Chatlevel under Integrations -> Add integration -> n8n',
+			description: 'Your ChatLevel API key',
+		},
+		{
+			displayName: 'Base URL',
+			name: 'baseUrl',
+			type: 'string',
+			default: 'https://api.chatlevel.io/v1',
+			description: 'Base URL for the ChatLevel API',
 		},
 	];
 
@@ -34,8 +41,8 @@ export class ChatLevelApi implements ICredentialType {
 
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: 'https://api.chatlevel.io/v1',
-			url: '/devices',
+			baseURL: '={{$credentials.baseUrl || "https://api.chatlevel.io/v1"}}',
+			url: '/me',
 			method: 'GET',
 		},
 	};

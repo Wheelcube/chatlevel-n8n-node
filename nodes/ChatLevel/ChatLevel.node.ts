@@ -14,10 +14,10 @@ export class ChatLevel implements INodeType {
 		icon: 'file:chatlevel.svg',
 		group: ['transform'],
 		version: 1,
-		subtitle: '={{$parameter["operation"]}}',
-		description: 'Manage ChatLevel WhatsApp devices',
+		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+		description: 'Interact with ChatLevel WhatsApp API',
 		defaults: {
-			name: 'ChatLevel Device',
+			name: 'ChatLevel',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -28,12 +28,35 @@ export class ChatLevel implements INodeType {
 			},
 		],
 		properties: [
+			{
+				displayName: 'Resource',
+				name: 'resource',
+				type: 'options',
+				noDataExpression: true,
+				options: [
+					{
+						name: 'Device',
+						value: 'device',
+					},
+					{
+						name: 'Message',
+						value: 'message',
+					},
+				],
+				default: 'message',
+			},
 
+			// Device Operations
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
 				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['device'],
+					},
+				},
 				options: [
 					{
 						name: 'Create',
@@ -81,6 +104,34 @@ export class ChatLevel implements INodeType {
 				default: 'getMany',
 			},
 
+			// Message Operations
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['message'],
+					},
+				},
+				options: [
+					{
+						name: 'Send Text',
+						value: 'sendText',
+						description: 'Send a text message',
+						action: 'Send a text message',
+					},
+					{
+						name: 'Send Media',
+						value: 'sendMedia',
+						description: 'Send a media message',
+						action: 'Send a media message',
+					},
+				],
+				default: 'sendText',
+			},
+
 			// Device ID field (used by most operations)
 			{
 				displayName: 'Device ID',
@@ -89,34 +140,12 @@ export class ChatLevel implements INodeType {
 				required: true,
 				displayOptions: {
 					show: {
+						resource: ['device'],
 						operation: ['get', 'update', 'delete', 'disconnect', 'restart'],
 					},
 				},
 				default: '',
 				description: 'The ID of the device',
-			},
-
-			// Device Get Fields
-			{
-				displayName: 'Additional Fields',
-				name: 'additionalFields',
-				type: 'collection',
-				placeholder: 'Add Field',
-				default: {},
-				displayOptions: {
-					show: {
-						operation: ['get'],
-					},
-				},
-				options: [
-					{
-						displayName: 'Include Subscription Status',
-						name: 'includeSubscriptionStatus',
-						type: 'boolean',
-						default: false,
-						description: 'Whether to include the WhatsApp Business subscription status in the response',
-					},
-				],
 			},
 			{
 				displayName: 'Device ID',
@@ -133,20 +162,6 @@ export class ChatLevel implements INodeType {
 			},
 
 			// Device Create Fields
-			{
-				displayName: 'Phone Number',
-				name: 'phoneNumber',
-				type: 'string',
-				required: true,
-				displayOptions: {
-					show: {
-						resource: ['device'],
-						operation: ['create'],
-					},
-				},
-				default: '',
-				description: 'Phone number with country code without + or 00',
-			},
 			{
 				displayName: 'Additional Fields',
 				name: 'additionalFields',
@@ -168,13 +183,6 @@ export class ChatLevel implements INodeType {
 						description: 'User-friendly device name (1-20 characters)',
 					},
 					{
-						displayName: 'Password',
-						name: 'password',
-						type: 'string',
-						default: '',
-						description: 'Password for user authorization',
-					},
-					{
 						displayName: 'Webhook URL',
 						name: 'webhookUrl',
 						type: 'string',
@@ -187,24 +195,20 @@ export class ChatLevel implements INodeType {
 						type: 'multiOptions',
 						options: [
 							{
-								name: 'Connection Opened',
-								value: 'connection.open',
+								name: 'Device Connected',
+								value: 'device.connected',
 							},
 							{
-								name: 'Connection Closed',
-								value: 'connection.closed',
+								name: 'Device Disconnected',
+								value: 'device.disconnected',
 							},
 							{
-								name: 'Connection Authentication',
-								value: 'connection.auth',
+								name: 'QR Code',
+								value: 'qr',
 							},
 							{
-								name: 'Connection Timeout',
-								value: 'connection.timeout',
-							},
-							{
-								name: 'Connection Logout',
-								value: 'connection.logout',
+								name: 'QR Timeout',
+								value: 'qr.timeout',
 							},
 							{
 								name: 'Message Received',
@@ -221,10 +225,6 @@ export class ChatLevel implements INodeType {
 							{
 								name: 'Message Deleted',
 								value: 'message.deleted',
-							},
-							{
-								name: 'Call',
-								value: 'call',
 							},
 						],
 						default: [],
@@ -260,14 +260,14 @@ export class ChatLevel implements INodeType {
 						name: 'name',
 						type: 'string',
 						default: '',
-						description: 'New name for the device',
+						description: 'New name for the device (1-20 characters)',
 					},
 					{
 						displayName: 'Webhook URL',
 						name: 'webhookUrl',
 						type: 'string',
 						default: '',
-						description: 'Webhook URL for receiving events (null to disable)',
+						description: 'Webhook URL for receiving events (leave empty to disable)',
 					},
 					{
 						displayName: 'Webhook Events',
@@ -275,24 +275,20 @@ export class ChatLevel implements INodeType {
 						type: 'multiOptions',
 						options: [
 							{
-								name: 'Connection Opened',
-								value: 'connection.open',
+								name: 'Device Connected',
+								value: 'device.connected',
 							},
 							{
-								name: 'Connection Closed',
-								value: 'connection.closed',
+								name: 'Device Disconnected',
+								value: 'device.disconnected',
 							},
 							{
-								name: 'Connection Authentication',
-								value: 'connection.auth',
+								name: 'QR Code',
+								value: 'qr',
 							},
 							{
-								name: 'Connection Timeout',
-								value: 'connection.timeout',
-							},
-							{
-								name: 'Connection Logout',
-								value: 'connection.logout',
+								name: 'QR Timeout',
+								value: 'qr.timeout',
 							},
 							{
 								name: 'Message Received',
@@ -309,10 +305,6 @@ export class ChatLevel implements INodeType {
 							{
 								name: 'Message Deleted',
 								value: 'message.deleted',
-							},
-							{
-								name: 'Call',
-								value: 'call',
 							},
 						],
 						default: [],
@@ -464,145 +456,179 @@ export class ChatLevel implements INodeType {
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const returnData: INodeExecutionData[] = [];
+		const resource = this.getNodeParameter('resource', 0);
 		const operation = this.getNodeParameter('operation', 0);
 
 		for (let i = 0; i < items.length; i++) {
 			try {
-				if (operation === 'create') {
-					const phoneNumber = this.getNodeParameter('phoneNumber', i) as string;
-					const additionalFields = this.getNodeParameter('additionalFields', i, {});
+				if (resource === 'device') {
+					if (operation === 'create') {
+						const additionalFields = this.getNodeParameter('additionalFields', i, {});
 
-					const body: IDataObject = {
-						phoneNumber,
-					};
+						const body: IDataObject = {};
 
-					if (additionalFields.name) {
-						body.name = additionalFields.name;
+						if (additionalFields.name) {
+							body.name = additionalFields.name;
+						}
+
+						if (additionalFields.webhookUrl) {
+							body.webhookUrl = additionalFields.webhookUrl;
+						}
+
+						if (additionalFields.webhookEvents && Array.isArray(additionalFields.webhookEvents) && additionalFields.webhookEvents.length > 0) {
+							body.webhookEvents = additionalFields.webhookEvents;
+						}
+
+						if (additionalFields.phoneNumber) {
+							body.phoneNumber = additionalFields.phoneNumber;
+						}
+
+						const responseData = await chatLevelApiRequest.call(
+							this,
+							'POST',
+							'/devices',
+							body,
+						);
+
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					} else if (operation === 'getMany') {
+						const responseData = await chatLevelApiRequest.call(
+							this,
+							'GET',
+							'/devices',
+						);
+
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					} else if (operation === 'get') {
+						const deviceId = this.getNodeParameter('deviceId', i) as number;
+
+						const responseData = await chatLevelApiRequest.call(
+							this,
+							'GET',
+							`/devices/${deviceId}`,
+						);
+
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					} else if (operation === 'update') {
+						const deviceId = this.getNodeParameter('deviceId', i) as number;
+						const updateFields = this.getNodeParameter('updateFields', i, {});
+
+						const body: IDataObject = {};
+
+						if (updateFields.name) {
+							body.name = updateFields.name;
+						}
+
+						if (updateFields.webhookUrl !== undefined) {
+							body.webhookUrl = updateFields.webhookUrl || null;
+						}
+
+						if (updateFields.webhookEvents && Array.isArray(updateFields.webhookEvents)) {
+							body.webhookEvents = updateFields.webhookEvents;
+						}
+
+						if (updateFields.subscription_status) {
+							body.subscription_status = updateFields.subscription_status;
+						}
+
+						const responseData = await chatLevelApiRequest.call(
+							this,
+							'PUT',
+							`/devices/${deviceId}`,
+							body,
+						);
+
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					} else if (operation === 'delete') {
+						const deviceId = this.getNodeParameter('deviceId', i) as number;
+
+						await chatLevelApiRequest.call(
+							this,
+							'DELETE',
+							`/devices/${deviceId}`,
+						);
+
+						returnData.push({ json: { success: true }, pairedItem: { item: i } });
+					} else if (operation === 'disconnect') {
+						const deviceId = this.getNodeParameter('deviceId', i) as number;
+
+						const responseData = await chatLevelApiRequest.call(
+							this,
+							'POST',
+							`/devices/${deviceId}/disconnect`,
+						);
+
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					} else if (operation === 'restart') {
+						const deviceId = this.getNodeParameter('deviceId', i) as number;
+						const phoneNumber = this.getNodeParameter('phoneNumber', i, '') as string;
+
+						const body: IDataObject = {};
+
+						if (phoneNumber) {
+							body.phoneNumber = phoneNumber;
+						}
+
+						const responseData = await chatLevelApiRequest.call(
+							this,
+							'POST',
+							`/devices/${deviceId}/restart`,
+							body,
+						);
+
+						returnData.push({ json: responseData, pairedItem: { item: i } });
 					}
+				} else if (resource === 'message') {
+					if (operation === 'sendText') {
+						const deviceId = this.getNodeParameter('deviceId', i) as number;
+						const toNumber = this.getNodeParameter('toNumber', i) as string;
+						const message = this.getNodeParameter('message', i) as string;
 
-					if (additionalFields.password) {
-						body.password = additionalFields.password;
+						const body = {
+							toNumber,
+							message,
+						};
+
+						const responseData = await chatLevelApiRequest.call(
+							this,
+							'POST',
+							`/devices/${deviceId}/messages/text`,
+							body,
+						);
+
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					} else if (operation === 'sendMedia') {
+						const deviceId = this.getNodeParameter('deviceId', i) as number;
+						const toNumber = this.getNodeParameter('toNumber', i) as string;
+						const mediaSource = this.getNodeParameter('mediaSource', i) as string;
+						const mediaCaption = this.getNodeParameter('mediaCaption', i, '') as string;
+
+						const body: IDataObject = {
+							toNumber,
+						};
+
+						if (mediaSource === 'url') {
+							const mediaUrl = this.getNodeParameter('mediaUrl', i) as string;
+							body.mediaUrl = mediaUrl;
+						} else {
+							const mediaBase64 = this.getNodeParameter('mediaBase64', i) as string;
+							body.mediaBase64 = mediaBase64;
+						}
+
+						if (mediaCaption) {
+							body.mediaCaption = mediaCaption;
+						}
+
+						const responseData = await chatLevelApiRequest.call(
+							this,
+							'POST',
+							`/devices/${deviceId}/messages/media`,
+							body,
+						);
+
+						returnData.push({ json: responseData, pairedItem: { item: i } });
 					}
-
-					if (additionalFields.webhookUrl) {
-						body.webhookUrl = additionalFields.webhookUrl;
-					}
-
-					if (additionalFields.webhookEvents && Array.isArray(additionalFields.webhookEvents) && additionalFields.webhookEvents.length > 0) {
-						body.webhookEvents = additionalFields.webhookEvents;
-					}
-
-					const responseData = await chatLevelApiRequest.call(
-						this,
-						'POST',
-						'/devices',
-						body,
-					);
-
-					returnData.push({ json: responseData, pairedItem: { item: i } });
-
-				} else if (operation === 'getMany') {
-					const responseData = await chatLevelApiRequest.call(
-						this,
-						'GET',
-						'/devices',
-					);
-
-					returnData.push({ json: responseData, pairedItem: { item: i } });
-
-				} else if (operation === 'get') {
-					const deviceId = this.getNodeParameter('deviceId', i) as number;
-					const additionalFields = this.getNodeParameter('additionalFields', i, {});
-
-					const qs: IDataObject = {};
-
-					if (additionalFields.includeSubscriptionStatus === true) {
-						qs.includeSubscriptionStatus = true;
-					}
-
-					const responseData = await chatLevelApiRequest.call(
-						this,
-						'GET',
-						`/devices/${deviceId}`,
-						{},
-						qs,
-					);
-
-					returnData.push({ json: responseData, pairedItem: { item: i } });
-
-				} else if (operation === 'update') {
-					const deviceId = this.getNodeParameter('deviceId', i) as number;
-					const updateFields = this.getNodeParameter('updateFields', i, {});
-
-					const body: IDataObject = {};
-
-					if (updateFields.name) {
-						body.name = updateFields.name;
-					}
-
-					if (updateFields.webhookUrl !== undefined) {
-						body.webhookUrl = updateFields.webhookUrl || null;
-					}
-
-					if (updateFields.webhookEvents && Array.isArray(updateFields.webhookEvents)) {
-						body.webhookEvents = updateFields.webhookEvents;
-					}
-
-					if (updateFields.subscription_status) {
-						body.subscription_status = updateFields.subscription_status;
-					}
-
-					const responseData = await chatLevelApiRequest.call(
-						this,
-						'PUT',
-						`/devices/${deviceId}`,
-						body,
-					);
-
-					returnData.push({ json: responseData, pairedItem: { item: i } });
-
-				} else if (operation === 'delete') {
-					const deviceId = this.getNodeParameter('deviceId', i) as number;
-
-					await chatLevelApiRequest.call(
-						this,
-						'DELETE',
-						`/devices/${deviceId}`,
-					);
-
-					returnData.push({ json: { success: true }, pairedItem: { item: i } });
-
-				} else if (operation === 'disconnect') {
-					const deviceId = this.getNodeParameter('deviceId', i) as number;
-
-					const responseData = await chatLevelApiRequest.call(
-						this,
-						'POST',
-						`/devices/${deviceId}/disconnect`,
-					);
-
-					returnData.push({ json: responseData, pairedItem: { item: i } });
-
-				} else if (operation === 'restart') {
-					const deviceId = this.getNodeParameter('deviceId', i) as number;
-					const phoneNumber = this.getNodeParameter('phoneNumber', i, '') as string;
-
-					const body: IDataObject = {};
-
-					if (phoneNumber) {
-						body.phoneNumber = phoneNumber;
-					}
-
-					const responseData = await chatLevelApiRequest.call(
-						this,
-						'POST',
-						`/devices/${deviceId}/restart`,
-						body,
-					);
-
-					returnData.push({ json: responseData, pairedItem: { item: i } });
 				}
-
 			} catch (error) {
 				if (this.continueOnFail()) {
 					const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
@@ -633,7 +659,7 @@ async function chatLevelApiRequest(
 		method,
 		body,
 		qs,
-		uri: `https://api.chatlevel.io/v1${endpoint}`,
+		uri: `${credentials.baseUrl || 'https://api.chatlevel.io/v1'}${endpoint}`,
 		headers: {
 			'Authorization': `Bearer ${credentials.apiKey}`,
 			'Content-Type': 'application/json',

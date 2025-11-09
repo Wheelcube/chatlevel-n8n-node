@@ -19,12 +19,7 @@ export class ChatLevelTrigger implements INodeType {
 		},
 		inputs: [],
 		outputs: ['main'],
-		credentials: [
-			{
-				name: 'chatLevelApi',
-				required: true,
-			},
-		],
+		credentials: [],
 		webhooks: [
 			{
 				name: 'default',
@@ -40,29 +35,19 @@ export class ChatLevelTrigger implements INodeType {
 				type: 'multiOptions',
 				options: [
 					{
-						name: 'Connection Opened',
-						value: 'connection.open',
-						description: 'Triggers when a connection is opened',
+						name: 'Device Connected',
+						value: 'device.connected',
+						description: 'Triggers when a device connects to WhatsApp',
 					},
 					{
-						name: 'Connection Closed',
-						value: 'connection.closed',
-						description: 'Triggers when a connection is closed',
+						name: 'Device Disconnected',
+						value: 'device.disconnected',
+						description: 'Triggers when a device disconnects from WhatsApp',
 					},
 					{
-						name: 'Connection Authentication',
-						value: 'connection.auth',
-						description: 'Triggers on connection authentication events',
-					},
-					{
-						name: 'Connection Timeout',
-						value: 'connection.timeout',
-						description: 'Triggers when a connection times out',
-					},
-					{
-						name: 'Connection Logout',
-						value: 'connection.logout',
-						description: 'Triggers when a connection is logged out',
+						name: 'Message Deleted',
+						value: 'message.deleted',
+						description: 'Triggers when a message is deleted',
 					},
 					{
 						name: 'Message Received',
@@ -80,14 +65,14 @@ export class ChatLevelTrigger implements INodeType {
 						description: 'Triggers when a message is updated',
 					},
 					{
-						name: 'Message Deleted',
-						value: 'message.deleted',
-						description: 'Triggers when a message is deleted',
+						name: 'QR Code',
+						value: 'qr',
+						description: 'Triggers when a QR code is generated',
 					},
 					{
-						name: 'Call',
-						value: 'call',
-						description: 'Triggers on call events',
+						name: 'QR Timeout',
+						value: 'qr.timeout',
+						description: 'Triggers when QR code expires',
 					},
 				],
 				default: [],

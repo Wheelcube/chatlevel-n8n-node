@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-chatlevelio",
-  "version": "0.2.0",
-  "description": "n8n node for ChatLevel WhatsApp API integration",
+  "version": "0.1.0",
+  "description": "n8n node for Chatlevel WhatsApp API integration",
   "keywords": [
     "n8n-community-node-package",
     "n8n",
@@ -34,7 +34,7 @@
     ],
     "nodes": [
       "dist/nodes/ChatLevel/ChatLevel.node.js",
-      "dist/nodes/ChatLevel/ChatLevel.trigger.node.js"
+      "dist/nodes/ChatLevel/ChatLevelTrigger.node.js"
     ]
   },
   "devDependencies": {
