@@ -11,7 +11,7 @@ import {
 
 export class ChatLevel implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'ChatLevel',
+		displayName: 'Chatlevel',
 		name: 'chatLevel',
 		icon: 'file:chatlevel.svg',
 		group: ['transform'],
@@ -19,7 +19,7 @@ export class ChatLevel implements INodeType {
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Interact with ChatLevel WhatsApp API',
 		defaults: {
-			name: 'ChatLevel',
+			name: 'Chatlevel',
 		},
 		inputs: ['main'],
 		outputs: ['main'],

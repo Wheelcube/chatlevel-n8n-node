@@ -5,7 +5,7 @@ const n8n_workflow_1 = require("n8n-workflow");
 class ChatLevel {
     constructor() {
         this.description = {
-            displayName: 'ChatLevel',
+            displayName: 'Chatlevel',
             name: 'chatLevel',
             icon: 'file:chatlevel.svg',
             group: ['transform'],
@@ -13,7 +13,7 @@ class ChatLevel {
             subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
             description: 'Interact with ChatLevel WhatsApp API',
             defaults: {
-                name: 'ChatLevel',
+                name: 'Chatlevel',
             },
             inputs: ['main'],
             outputs: ['main'],

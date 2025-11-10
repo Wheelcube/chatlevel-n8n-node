@@ -1,12 +1,4 @@
-import { IHookFunctions, IWebhookFunctions, INodeType, INodeTypeDescription, IWebhookResponseData } from 'n8n-workflow';
-export declare class ChatLevelTrigger implements INodeType {
-    description: INodeTypeDescription;
-    webhookMethods: {
-        default: {
-            checkExists(this: IHookFunctions): Promise<boolean>;
-            create(this: IHookFunctions): Promise<boolean>;
-            delete(this: IHookFunctions): Promise<boolean>;
-        };
-    };
-    webhook(this: IWebhookFunctions): Promise<IWebhookResponseData>;
+import { VersionedNodeType } from 'n8n-workflow';
+export declare class ChatLevelTrigger extends VersionedNodeType {
+    constructor();
 }

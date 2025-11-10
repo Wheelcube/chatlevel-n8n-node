@@ -1,7 +1,7 @@
 {
-  "name": "n8n-nodes-chatlevelio2",
-  "version": "0.0.2",
-  "description": "n8n node for ChatLevel WhatsApp API integration",
+  "name": "n8n-nodes-community-chatlevel3",
+  "version": "0.0.9",
+  "description": "n8n node for Chatlevel WhatsApp API integration",
   "keywords": [
     "n8n-community-node-package",
     "n8n",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "homepage": "https://docs.chatlevel.io",
   "author": {
-    "name": "ChatLevel",
+    "name": "Chatlevel",
     "email": "support@chatlevel.io"
   },
   "main": "index.js",

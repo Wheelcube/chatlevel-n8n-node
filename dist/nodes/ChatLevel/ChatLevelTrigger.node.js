@@ -1,128 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatLevelTrigger = void 0;
-class ChatLevelTrigger {
+const n8n_workflow_1 = require("n8n-workflow");
+const ChatLevelTriggerV1_1 = require("./v1/ChatLevelTriggerV1");
+class ChatLevelTrigger extends n8n_workflow_1.VersionedNodeType {
     constructor() {
-        this.description = {
-            displayName: 'ChatLevel Trigger',
+        const baseDescription = {
+            displayName: 'Chatlevel Trigger',
             name: 'chatLevelTrigger',
             icon: 'file:chatlevel.svg',
             group: ['trigger'],
-            version: 1,
-            description: 'Starts the workflow when ChatLevel events occur',
-            defaults: {
-                name: 'ChatLevel Trigger',
-            },
-            inputs: [],
-            outputs: ['main'],
-            credentials: [],
-            webhooks: [
-                {
-                    name: 'default',
-                    httpMethod: 'POST',
-                    responseMode: 'onReceived',
-                    path: 'webhook',
-                },
-            ],
-            properties: [
-                {
-                    displayName: 'Events',
-                    name: 'events',
-                    type: 'multiOptions',
-                    options: [
-                        {
-                            name: 'Call',
-                            value: 'call',
-                            description: 'Triggers when a call is received',
-                        },
-                        {
-                            name: 'Connection Auth',
-                            value: 'connection.auth',
-                            description: 'Triggers when device authentication occurs',
-                        },
-                        {
-                            name: 'Connection Closed',
-                            value: 'connection.closed',
-                            description: 'Triggers when connection is closed',
-                        },
-                        {
-                            name: 'Connection Logout',
-                            value: 'connection.logout',
-                            description: 'Triggers when device logs out',
-                        },
-                        {
-                            name: 'Connection Open',
-                            value: 'connection.open',
-                            description: 'Triggers when connection opens',
-                        },
-                        {
-                            name: 'Connection Timeout',
-                            value: 'connection.timeout',
-                            description: 'Triggers when connection times out',
-                        },
-                        {
-                            name: 'Message Deleted',
-                            value: 'message.deleted',
-                            description: 'Triggers when a message is deleted',
-                        },
-                        {
-                            name: 'Message Received',
-                            value: 'message.received',
-                            description: 'Triggers when a message is received',
-                        },
-                        {
-                            name: 'Message Sent',
-                            value: 'message.sent',
-                            description: 'Triggers when a message is sent',
-                        },
-                        {
-                            name: 'Message Updated',
-                            value: 'message.updated',
-                            description: 'Triggers when a message is updated',
-                        },
-                    ],
-                    default: [],
-                    required: true,
-                    description: 'The events to listen to',
-                },
-            ],
+            description: 'Handle Chatlevel events via webhooks',
+            defaultVersion: 1,
         };
-        this.webhookMethods = {
-            default: {
-                async checkExists() {
-                    return true;
-                },
-                async create() {
-                    return true;
-                },
-                async delete() {
-                    return true;
-                },
-            },
+        const nodeVersions = {
+            1: new ChatLevelTriggerV1_1.ChatLevelTriggerV1(),
         };
-    }
-    async webhook() {
-        const bodyData = this.getBodyData();
-        const events = this.getNodeParameter('events');
-        // Get the event type from the webhook payload
-        const eventType = bodyData.event;
-        // Check if this event should be processed
-        if (events.length > 0 && !events.includes(eventType)) {
-            // Event not in the list, return without triggering workflow
-            return {
-                workflowData: [[]],
-            };
-        }
-        // Return the full webhook data
-        return {
-            workflowData: [
-                [
-                    {
-                        json: bodyData,
-                    },
-                ],
-            ],
-        };
+        super(nodeVersions, baseDescription);
     }
 }
 exports.ChatLevelTrigger = ChatLevelTrigger;
