@@ -101,11 +101,10 @@ To use this node, you need ChatLevel API credentials:
 ### Receiving Messages (Webhook Trigger)
 
 1. Add **ChatLevel Trigger** node to workflow
-2. Select which events you want to receive
-3. Copy the webhook URL shown in n8n
-4. In ChatLevel dashboard, go to your device settings
-5. Add the webhook URL and select the same events
-6. Your workflow will now trigger automatically when events occur
+2. Copy the webhook URL shown in n8n
+3. In ChatLevel dashboard, go to your device settings
+4. Add the webhook URL and select the events you want to receive
+5. Your workflow will now trigger automatically when events occur
 
 ## Example Workflows
 
@@ -210,7 +209,7 @@ ChatLevel Trigger (connection.closed) → Slack (Send Notification)
 
 For issues with this node, please open an issue on the [GitHub repository](https://github.com/yourusername/chatlevel-n8n/issues).
 
-For ChatLevel API support, visit [ChatLevel Documentation](https://docs.chatlevel.io) or contact their support team.
+For ChatLevel API support, visit [ChatLevel Documentation](https://docs.chatlevel.io) or contact the support team.
 
 ## License
 
