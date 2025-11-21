@@ -207,7 +207,7 @@ ChatLevel Trigger (connection.closed) → Slack (Send Notification)
 
 ## Support
 
-For issues with this node, please open an issue on the [GitHub repository](https://github.com/yourusername/chatlevel-n8n/issues).
+For issues with this node, please open an issue on the [GitHub repository](https://github.com/Wheelcube/chatlevel-n8n-node/issues).
 
 For ChatLevel API support, visit [ChatLevel Documentation](https://docs.chatlevel.io) or contact the support team.
 
