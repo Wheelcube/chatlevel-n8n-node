@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-chatlevel",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "n8n node for Chatlevel WhatsApp API integration",
   "keywords": [
     "n8n-community-node-package",
@@ -25,7 +25,8 @@
     "prepublishOnly": "npm run build && npm run lint"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "publishConfig": {
   "access": "public"

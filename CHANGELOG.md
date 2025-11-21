@@ -41,6 +41,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API key stored securely using n8n's credential system
 - All API requests use HTTPS
 
+## [1.0.3] - 2025-01-21
+
+### Fixed
+- Include README.md in published package so it displays on npm
+
+## [1.0.2] - 2025-01-21
+
+### Changed
+- Updated README documentation with minor adjustments
+
 ## [1.0.1] - 2025-01-21
 
 ### Changed
