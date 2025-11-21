@@ -42,7 +42,7 @@ export class ChatLevelApi implements ICredentialType {
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: '={{$credentials.baseUrl || "https://api.chatlevel.io/v1"}}',
-			url: '/me',
+			url: '/devices',
 			method: 'GET',
 		},
 	};
