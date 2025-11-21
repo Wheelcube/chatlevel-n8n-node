@@ -492,9 +492,9 @@ export class ChatLevel implements INodeType {
 		loadOptions: {
 			async getDevices(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const credentials = await this.getCredentials('chatLevelApi');
-				const response = await this.helpers.request({
+				const response = await this.helpers.httpRequest({
 					method: 'GET',
-					uri: `${credentials.baseUrl || 'https://api.chatlevel.io/v1'}/devices`,
+					url: `${credentials.baseUrl || 'https://api.chatlevel.io/v1'}/devices`,
 					headers: {
 						Authorization: `Bearer ${credentials.apiKey}`,
 					},
@@ -719,7 +719,7 @@ async function chatLevelApiRequest(
 		method,
 		body,
 		qs,
-		uri: `${credentials.baseUrl || 'https://api.chatlevel.io/v1'}${endpoint}`,
+		url: `${credentials.baseUrl || 'https://api.chatlevel.io/v1'}${endpoint}`,
 		headers: {
 			'Authorization': `Bearer ${credentials.apiKey}`,
 			'Content-Type': 'application/json',
@@ -736,7 +736,7 @@ async function chatLevelApiRequest(
 	}
 
 	try {
-		return await this.helpers.request(options);
+		return await this.helpers.httpRequest(options);
 	} catch (error) {
 		if (error instanceof Error) {
 			throw new NodeOperationError(
