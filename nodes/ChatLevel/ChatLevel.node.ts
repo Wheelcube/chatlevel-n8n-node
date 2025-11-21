@@ -7,6 +7,8 @@ import {
 	NodeOperationError,
 	ILoadOptionsFunctions,
 	INodePropertyOptions,
+	IHttpRequestOptions,
+	IHttpRequestMethods,
 } from 'n8n-workflow';
 
 export class ChatLevel implements INodeType {
@@ -708,14 +710,14 @@ export class ChatLevel implements INodeType {
 
 async function chatLevelApiRequest(
 	this: IExecuteFunctions,
-	method: string,
+	method: IHttpRequestMethods,
 	endpoint: string,
 	body: IDataObject = {},
 	qs: IDataObject = {},
 ): Promise<any> {
 	const credentials = await this.getCredentials('chatLevelApi');
 
-	const options: IDataObject = {
+	const options: IHttpRequestOptions = {
 		method,
 		body,
 		qs,
