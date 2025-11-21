@@ -37,7 +37,7 @@ class ChatLevelApi {
         this.test = {
             request: {
                 baseURL: '={{$credentials.baseUrl || "https://api.chatlevel.io/v1"}}',
-                url: '/me',
+                url: '/devices',
                 method: 'GET',
             },
         };
