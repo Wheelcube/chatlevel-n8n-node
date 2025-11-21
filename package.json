@@ -15,6 +15,10 @@
     "name": "Chatlevel",
     "email": "support@chatlevel.io"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wheelcube/chatlevel-n8n-node.git"
+  },
   "main": "index.js",
   "scripts": {
     "build": "tsc && gulp build:icons",
@@ -26,7 +30,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE.md"
   ],
   "publishConfig": {
     "access": "public"
