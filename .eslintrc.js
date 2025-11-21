@@ -7,6 +7,11 @@ module.exports = {
     tsconfigRootDir: __dirname,
   },
   extends: ['plugin:n8n-nodes-base/community'],
+  ignorePatterns: [
+    'dist',
+    '*.js',
+    'node_modules',
+  ],
   rules: {
     'n8n-nodes-base/node-execute-block-missing-continue-on-fail': 'warn',
     'n8n-nodes-base/node-resource-description-filename-against-convention': 'warn',
