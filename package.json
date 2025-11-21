@@ -53,8 +53,5 @@
   },
   "peerDependencies": {
     "n8n-workflow": "*"
-  },
-  "dependencies": {
-    "n8n-nodes-chatlevelio": "^0.4.1"
   }
 }
