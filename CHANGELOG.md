@@ -41,6 +41,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API key stored securely using n8n's credential system
 - All API requests use HTTPS
 
+## [1.0.1] - 2025-01-21
+
+### Changed
+- Updated README documentation with minor adjustments
+
 ## [Unreleased]
 
 ### Planned
