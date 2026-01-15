@@ -385,7 +385,7 @@ export class ChatLevel implements INodeType {
 
 			// Message: Send Text Fields
 			{
-				displayName: 'To Number',
+				displayName: 'To Number / JID',
 				name: 'toNumber',
 				type: 'string',
 				required: true,
@@ -397,7 +397,7 @@ export class ChatLevel implements INodeType {
 				},
 				default: '',
 				placeholder: '31620292537',
-				description: 'WhatsApp phone number (digits only)',
+				description: 'WhatsApp phone number (digits only) or full JID (e.g., [email protected] for groups)',
 			},
 			{
 				displayName: 'Message',
@@ -647,7 +647,7 @@ export class ChatLevel implements INodeType {
 						const message = this.getNodeParameter('message', i) as string;
 
 						const body = {
-							toNumber,
+							to: toNumber,
 							message,
 						};
 
@@ -666,7 +666,7 @@ export class ChatLevel implements INodeType {
 						const mediaCaption = this.getNodeParameter('mediaCaption', i, '') as string;
 
 						const body: IDataObject = {
-							toNumber,
+							to: toNumber,
 						};
 
 						if (mediaSource === 'url') {
