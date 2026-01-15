@@ -383,33 +383,9 @@ export class ChatLevel implements INodeType {
 				description: 'Phone number for pairing code (optional, alternative to QR)',
 			},
 
-			// Message: Recipient Type
-			{
-				displayName: 'Recipient Type',
-				name: 'recipientType',
-				type: 'options',
-				displayOptions: {
-					show: {
-						resource: ['message'],
-						operation: ['sendText', 'sendMedia'],
-					},
-				},
-				options: [
-					{
-						name: 'Phone Number',
-						value: 'phoneNumber',
-					},
-					{
-						name: 'JID',
-						value: 'jid',
-					},
-				],
-				default: 'phoneNumber',
-				description: 'How to identify the recipient. JID is more reliable and supports groups.',
-			},
 			// Message: Send Text Fields
 			{
-				displayName: 'To',
+				displayName: 'To Number / JID',
 				name: 'toNumber',
 				type: 'string',
 				required: true,
@@ -417,28 +393,11 @@ export class ChatLevel implements INodeType {
 					show: {
 						resource: ['message'],
 						operation: ['sendText', 'sendMedia'],
-						recipientType: ['phoneNumber'],
 					},
 				},
 				default: '',
 				placeholder: '31620292537',
-				description: 'WhatsApp phone number (digits only)',
-			},
-			{
-				displayName: 'To',
-				name: 'toJid',
-				type: 'string',
-				required: true,
-				displayOptions: {
-					show: {
-						resource: ['message'],
-						operation: ['sendText', 'sendMedia'],
-						recipientType: ['jid'],
-					},
-				},
-				default: '',
-				placeholder: '[email protected]',
-				description: 'Full WhatsApp JID (e.g., [email protected] for users, [email protected] for groups)',
+				description: 'WhatsApp phone number (digits only) or full JID (e.g., [email protected] for groups)',
 			},
 			{
 				displayName: 'Message',
@@ -684,16 +643,13 @@ export class ChatLevel implements INodeType {
 				} else if (resource === 'message') {
 					if (operation === 'sendText') {
 						const deviceId = this.getNodeParameter('deviceId', i) as number;
-						const recipientType = this.getNodeParameter('recipientType', i) as string;
+						const toNumber = this.getNodeParameter('toNumber', i) as string;
 						const message = this.getNodeParameter('message', i) as string;
 
-						const body: IDataObject = { message };
-
-						if (recipientType === 'jid') {
-							body.to = this.getNodeParameter('toJid', i) as string;
-						} else {
-							body.toNumber = this.getNodeParameter('toNumber', i) as string;
-						}
+						const body = {
+							to: toNumber,
+							message,
+						};
 
 						const responseData = await chatLevelApiRequest.call(
 							this,
@@ -705,17 +661,13 @@ export class ChatLevel implements INodeType {
 						returnData.push({ json: responseData, pairedItem: { item: i } });
 					} else if (operation === 'sendMedia') {
 						const deviceId = this.getNodeParameter('deviceId', i) as number;
-						const recipientType = this.getNodeParameter('recipientType', i) as string;
+						const toNumber = this.getNodeParameter('toNumber', i) as string;
 						const mediaSource = this.getNodeParameter('mediaSource', i) as string;
 						const mediaCaption = this.getNodeParameter('mediaCaption', i, '') as string;
 
-						const body: IDataObject = {};
-
-						if (recipientType === 'jid') {
-							body.to = this.getNodeParameter('toJid', i) as string;
-						} else {
-							body.toNumber = this.getNodeParameter('toNumber', i) as string;
-						}
+						const body: IDataObject = {
+							to: toNumber,
+						};
 
 						if (mediaSource === 'url') {
 							const mediaUrl = this.getNodeParameter('mediaUrl', i) as string;
