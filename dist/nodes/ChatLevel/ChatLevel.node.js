@@ -370,7 +370,7 @@ class ChatLevel {
                 },
                 // Message: Send Text Fields
                 {
-                    displayName: 'To Number',
+                    displayName: 'To Number / JID',
                     name: 'toNumber',
                     type: 'string',
                     required: true,
@@ -382,7 +382,7 @@ class ChatLevel {
                     },
                     default: '',
                     placeholder: '31620292537',
-                    description: 'WhatsApp phone number (digits only)',
+                    description: 'WhatsApp phone number (digits only) or full JID (e.g., [email protected] for groups)',
                 },
                 {
                     displayName: 'Message',
@@ -577,7 +577,7 @@ class ChatLevel {
                         const toNumber = this.getNodeParameter('toNumber', i);
                         const message = this.getNodeParameter('message', i);
                         const body = {
-                            toNumber,
+                            to: toNumber,
                             message,
                         };
                         const responseData = await chatLevelApiRequest.call(this, 'POST', `/devices/${deviceId}/messages/text`, body);
@@ -589,7 +589,7 @@ class ChatLevel {
                         const mediaSource = this.getNodeParameter('mediaSource', i);
                         const mediaCaption = this.getNodeParameter('mediaCaption', i, '');
                         const body = {
-                            toNumber,
+                            to: toNumber,
                         };
                         if (mediaSource === 'url') {
                             const mediaUrl = this.getNodeParameter('mediaUrl', i);
